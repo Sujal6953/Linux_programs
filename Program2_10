@@ -1,0 +1,186 @@
+#Program2
+echo "Files with read, write and execute Permissions"
+for i in *
+do 
+  if [ -r "$i" ] && [ -w "$i" ] && [ -x "$i" ]
+  then 
+    echo "$i"
+  fi
+done
+
+#Program3 : list of files names with each word occurances
+echo "Creating input files..."
+cat>file1.txt<<EOF
+apple orange mango
+EOF
+
+cat>file2.txt<<EOF
+apple apple mango banana
+EOF
+
+cat>file3.txt<<EOF
+orange mango apple apple
+EOF
+
+echo "First file"
+first=file1.txt
+echo "Remaining files"
+set -- file2.txt file3.txt
+for word in $(cat $first)
+do
+  echo "Word:$word"
+  for file in "$@"
+  do
+    count=$(grep -ow "$word" "$file" | wc -l)
+    echo "$file:$count"
+  done
+  echo "--------------"
+done
+
+#Program4 : lowercase to uppercase
+echo "Creating file1.txt..."
+cat>file1.txt<<EOF
+hello linux
+shell scripting
+EOF
+
+echo "Creating file2.txt..."
+cat>file2.txt<<EOF
+welcome to linux
+operating system
+EOF
+echo "Processing those files..."
+set -- file1.txt file2.txt
+for file in "$@"
+do 
+	if [ -f "file" ]
+	then 
+		tr '[:lower:]' '[:upper:]' <"$file"> temp
+		mv temp "$file"
+		echo "$file converted to uppercase"
+	else
+		echo "$file does not exists"
+	fi
+done
+
+#Program5 : select files that has 2 characters and blank space < 1
+echo "creating a sample file..."
+cat>file.txt<<EOF
+hi
+ok
+a
+12
+cat
+Hello world
+Hello  world
+Linux  OS
+EOF
+
+echo "Lines with exactly 2 characters:"
+grep "^..$" file.txt
+echo
+echo "Lines with more than 1 blank sapce:"
+grep "  \{2,\}"  file.txt
+
+#Program6 : Deleting duplicate file
+echo "Creating first file..."
+cat>file1.txt<<EOF
+Hello Linux
+Shell Scripting
+EOF
+
+echo "Creating second file..."
+cat>file2.txt<<EOF
+Hello Linux
+Shell Scripting
+EOF
+
+echo "Comparing two files"
+cmp -s file1.txt file2.txt 
+
+if [ $? -eq 0 ]
+then 
+	echo "Both files are identical."
+	rm file2.txt
+	echo "file2.txt deleted"
+else
+	echo "Files are different"
+fi
+
+#Program7 : vowels 
+echo "Creating a sample file"
+cat>file1.txt<<EOF
+sky
+apple
+rhythm
+linux
+bcd
+Welcome to linux
+Shell Scripting
+EOF
+
+echo "Contents of the files"
+cat file1.txt
+echo
+echo "Lines without vowels"
+grep -iv '[aeiou]' file1.txt
+count=$(grep -iv '[aeiou]' file1.txt | wc -l )
+echo "Number of lines without vowels : $count"
+echo 
+echo "Number of characters, words and lines:"
+wc file1.txt
+
+#Program8 : list all the files in the given directory
+echo "Create a directory"
+mkdir mydir
+
+echo "Create sample files"
+touch mydir/file1.txt
+touch mydir/file2.txt
+touch mydir/file3.txt
+
+echo "-----------------------------"
+echo "List of files in the directory"
+echo "Current directory"
+pwd
+echo
+echo "Files present in mydir are:"
+ls mydir | wc -l
+echo
+echo "Program completed"
+
+#Program9 : Display list of currently logged in users
+echo "************************"
+echo "List of currently logged-in users"
+echo "************************"
+echo
+echo "Current Date and time"
+date
+echo "Users currently logged in:"
+who
+echo
+echo "Total numner of users logged in:"
+who | wc -l
+echo 
+echo "Program completed"
+
+#Program10 : Merge two files
+echo "Creating first file"
+cat>file1.txt<<EOF
+Welcome to linux
+EOF
+
+echo "Creating second file"
+cat>file2.txt<<EOF
+Shell Scripting
+EOF
+echo "Create third file"
+cat>file3.txt<<EOF
+Operating system
+EOF
+
+echo "Merging the three files..."
+cat file1.txt file2.txt file3.txt > merged.txt
+echo
+echo "Contents of merged file:"
+cat merged.txt
